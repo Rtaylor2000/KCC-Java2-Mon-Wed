@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class ShowAllAnimals implements AnimalDataHandler {
     @Override
-    public void handleTask(Animal dao) {
+    public void handleTask(AnimalDAO dao) {
         UIUtility.showSectionTitle("Show All Animals");
 
         try {

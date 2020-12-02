@@ -20,11 +20,12 @@ public class Animal implements Comparable<Animal>{
     private LocalDate dateAdded;
     private LocalDateTime lastFeedingTime;
 
-    public Animal(String id, String name, String gender, int age, boolean fixed,
+    public Animal(String id, String name, String species, String gender, int age, boolean fixed,
             int legs, BigDecimal weight, LocalDate dateAdded, 
             LocalDateTime lastFeedingTime){
         setId(id);
         setName(name);
+        setSpecies(species);
         setGender(gender);
         setAge(age);
         setFixed(fixed);
@@ -38,14 +39,14 @@ public class Animal implements Comparable<Animal>{
         id = "0";
         idList.add(id);
         name = "Unknown";
-        species = "Unknown";
+        species = "cat";
         gender = "Unknown";
         age = 0;
         fixed = false;
         legs = 4;
         weight = BigDecimal.valueOf(0);
-        dateAdded = LocalDate.of(2020, 9, 1); // September 1, 2020
-        lastFeedingTime = LocalDateTime.of(2020, 10, 1, 23, 59); // October 1, 2020 at 11:59pm
+        dateAdded = LocalDate.now(); // September 1, 2020
+        lastFeedingTime = LocalDateTime.now().withNano(0).withSecond(0); // October 1, 2020 at 11:59pm
     }
     
     public String getId(){
@@ -57,11 +58,7 @@ public class Animal implements Comparable<Animal>{
         this.id = id;
     }
     
-    // TODO: Need idValidator method - Only allow it to change if it's "0". Do not allow an id to be set if the id is already in the idList
     private void idValidator(String id) {
-        if(! id.equals("0")){
-            throw new IllegalArgumentException("You can't change an id that has already been set.");
-        }
         if (idList.contains(id)){
             throw new IllegalArgumentException("Id already in idList.");
         }
@@ -85,10 +82,7 @@ public class Animal implements Comparable<Animal>{
     }
   
     private void speciesValidator(String species) {
-        if(! species.equals("Unknown")){
-            throw new IllegalArgumentException("The species cannot be changed.");
-        }
-        if(!species.equals("cat") || !species.equals("dog") ){
+        if(! (species.toLowerCase().equals("cat") || species.toLowerCase().equals("dog")) ){
             throw new IllegalArgumentException("The species of must be either cat or dog");
         } 
     }
@@ -104,22 +98,16 @@ public class Animal implements Comparable<Animal>{
     
     // TODO: Need genderValidator method - Only allow male and female. Only allow it to change if it's "Unknown".
     private void genderValidator(String gender) {
-        Animal animal = new Animal();
-        if(animal.getGender().compareTo("Unknown") == 0){
-            if(gender.compareTo("female") == 0){
+            if(gender.toLowerCase().compareTo("female") == 0){
                     this.gender = gender;
             }
-            else if(gender.compareTo("male") == 0){
+            else if(gender.toLowerCase().compareTo("male") == 0){
                     this.gender = gender;
             }
             else{
-                System.out.println("Please enter 'male' or 'female' for "
+                throw new IllegalArgumentException("Please enter 'male' or 'female' for "
                                         + "gender.");
             }
-        }
-        else{
-            System.out.println("Gender has already been entered.");
-        }
     }
     
     public int getAge(){
@@ -188,12 +176,12 @@ public class Animal implements Comparable<Animal>{
         }
     }
 
-    public LocalDate getdateAdded(){
+    public LocalDate getDateAdded(){
         return dateAdded;
     }
 
     public void setDateAdded(LocalDate ldt){
-        dateValidator(dateAdded);
+        dateValidator(ldt);
         dateAdded = ldt;
     }
     
@@ -203,7 +191,7 @@ public class Animal implements Comparable<Animal>{
             throw new IllegalArgumentException(dateAdded + " is more than"
                     + " one week in the past");
         }
-        else if( dateAdded.isAfter(LocalDate.now())){
+        else if( LocalDate.now().isBefore(dateAdded)){
             throw new IllegalArgumentException(dateAdded + " is a date in the "
                     + "future");
         }

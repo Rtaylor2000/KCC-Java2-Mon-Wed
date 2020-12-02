@@ -25,10 +25,10 @@ public class AnimalDAOMySQL implements AnimalDAO {
 
     private static ArrayList<Animal> animals;
 
-    private Connection buildConnection() throws SQLException {
+    private Connection buildConnection() throws SQLException { //problem with connecting
         String databaseUrl = "localhost";
-        String databasePort = "3306";
-        String databaseName = "animals";
+        String databasePort = "3307";
+        String databaseName = "animal";
         String userName = "root";
         String password = "password";
 
@@ -75,6 +75,7 @@ public class AnimalDAOMySQL implements AnimalDAO {
                     animals.add(new Animal(
                             id,
                             name,
+                            species,
                             gender,
                             age,
                             fixed,
@@ -102,11 +103,32 @@ public class AnimalDAOMySQL implements AnimalDAO {
             readFromDataBase();
         }
     }
+    
+    @Override
+    public Animal getAnimalByAnimalName(String name) throws AnimalDataException {
+        Animal animal = null;
+        verifyAnimalList();
+        for(Animal tempAnimal : animals) {
+            if(tempAnimal.getName().equals(name)) {
+                animal = tempAnimal;
+                break;
+            }
+        
+        }
+        return animal;
+        
+    }
 
     @Override
-    public void createCarRecord(Animal animal) throws AnimalDataException {
+    public ArrayList<Animal> getAllAnimals() throws AnimalDataException {
         verifyAnimalList();
-        Animal checkAnimal = getAnimalById(animal.getId());
+        return animals;
+    }
+
+    @Override
+    public void createAnimal(Animal animal) throws AnimalDataException {
+        verifyAnimalList();
+        Animal checkAnimal = getAnimalByAnimalName(animal.getName());
         if (null != checkAnimal) {
             throw new AnimalDataException("Animal Ids must be unique...");
         }
@@ -123,7 +145,7 @@ public class AnimalDAOMySQL implements AnimalDAO {
             callableStatement.setBoolean("Fixed", animal.getFixed());
             callableStatement.setInt("Legs", animal.getLegs());
             callableStatement.setBigDecimal("Weight", animal.getWeight());
-            callableStatement.setObject("Date_Added", animal.getdateAdded());
+            callableStatement.setObject("Date_Added", animal.getDateAdded());
             callableStatement.setObject("Last_Feeding_Time",
                     animal.getLastFeedingTime());
             
@@ -138,16 +160,17 @@ public class AnimalDAOMySQL implements AnimalDAO {
     }
     
     @Override
-    public Animal getAnimalById(String id) throws AnimalDataException {
-        Animal animal = null;
-        verifyAnimalList();
-        for(Animal tempAnimal : animals) {
-            if(tempAnimal.getId().equals(id)) {
-                animal = tempAnimal;
-                break;
-            }
-        
-        }
-        return animal;
+    public void updateAnimal(Animal original, Animal updated) throws AnimalDataException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void deleteAnimal(Animal animal) throws AnimalDataException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void deleteAnimal(String animalName) throws AnimalDataException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

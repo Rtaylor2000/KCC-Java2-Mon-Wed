@@ -9,7 +9,7 @@ package edu.kcc.animal.data;
  *
  * @author Chantal Shirley
  */
-public class AnimalDAOCSV implements AnimalDAO {
+public class AnimalDAOCSV { // implements AnimalDAO {
     
     // TODO FILE_NAME
     // TODO ArrayList<Animal>
