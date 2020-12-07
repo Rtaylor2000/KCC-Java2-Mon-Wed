@@ -54,7 +54,7 @@ public class Animal implements Comparable<Animal>{
     }
 
     public void setId(String id) {
-        idValidator(id);
+        //idValidator(id);
         this.id = id;
     }
     
@@ -82,7 +82,7 @@ public class Animal implements Comparable<Animal>{
     }
   
     private void speciesValidator(String species) {
-        if(! (species.toLowerCase().equals("cat") || species.toLowerCase().equals("dog")) ){
+        if(!species.equals("cat") && !species.equals("dog")){
             throw new IllegalArgumentException("The species of must be either cat or dog");
         } 
     }

@@ -8,6 +8,8 @@ package edu.kcc;
 import edu.kcc.animal.Animal;
 import edu.kcc.animal.data.AnimalDAO;
 import edu.kcc.animal.data.AnimalDAOFactory;
+import edu.kcc.animal.data.AnimalDataException;
+import edu.kcc.animal.data.AnimalHistoryXML;
 import edu.kcc.ui.UIUtility;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,7 +19,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Scanner;
+import org.w3c.dom.DocumentFragment;
 
 /**
  *
@@ -26,6 +30,7 @@ import java.util.Scanner;
 public class Main {
     private static final int PORT = 7777;
     private static final String HOST_NAME = "localhost";
+    public static final AnimalHistoryXML xml = new AnimalHistoryXML();
     
     private static Animal getAnimalFromServer(String animalName) 
             throws UnknownHostException, IOException {
@@ -37,18 +42,28 @@ public class Main {
         outputStream.writeUTF(animalName);
         outputStream.flush();
         
-        Animal animal = null;
+        Animal animal = new Animal();
         
         String id = inputStream.readUTF();
+        //System.out.println("id: "+id);
         String name =  inputStream.readUTF();
+        //System.out.println("name: "+name);
         String species = inputStream.readUTF();
+        //System.out.println("species: "+species);
         String gender = inputStream.readUTF();
+        //System.out.println("gender: "+gender);
         int age = inputStream.readInt();
+        //System.out.println("age: "+age);
         Boolean fixed = inputStream.readBoolean();
+        //System.out.println("fixed: "+fixed);
         BigDecimal weight = BigDecimal.valueOf(inputStream.readDouble());
+        //System.out.println("weight: "+weight);
         String dateAdded = inputStream.readUTF();
+        //System.out.println("dateAdded: "+dateAdded);
         String lastFeeding = inputStream.readUTF();
+        //System.out.println("lastFeeding: "+lastFeeding);
         
+        animal.setId(id);
         animal.setId(id);
         animal.setName(name);
         animal.setSpecies(species);
@@ -86,7 +101,7 @@ public class Main {
         String prompt = "Your choice:";
         String errorMessage = "Invalid option.  Please try again.";
         String userChoice;
-        AnimalDAO dao = AnimalDAOFactory.getAnimalDAO();
+        //AnimalDAO dao = AnimalDAOFactory.getAnimalDAO();
 
         // Start the primary program logic
         boolean working = true;
@@ -97,7 +112,7 @@ public class Main {
                 case "1":
                     //add it here
                     String response;
-                    String question = "Enter the animals name or Q to quit:";
+                    String question = "\nEnter the animals name or Q to quit:";
                     boolean keepGoing = true;
                     while(keepGoing){
                         response = getUserInput(question);
@@ -106,21 +121,32 @@ public class Main {
                         } else {
                             try{
                                 Animal animal = getAnimalFromServer(response);
-                                System.out.print("Animal: "+animal);
+                                System.out.print(animal.toString());
+                                xml.createHistoryRecord(animal);
                             } catch(UnknownHostException uhe){
                                 System.out.println("ERROR: " + uhe.getMessage());
                                 System.out.println("Program terminating!");
                                 System.exit(-1);
                             } catch(IOException ioe) {
                                 System.out.println("ERROR: " + ioe.getMessage());
+                            } catch(AnimalDataException ex){
+                                System.out.println("ERROR: "+ex.getMessage());
                             }
                         }
                     }
                     System.out.println("\nProgram complete.");
                     break;
                 case "2":
-                    System.out.println("Not set up yet");
-                    //new FindOrder().handleTask(dao);
+                    try{
+                        System.out.println("LocalDateTime: "+ LocalDateTime.now().toString());
+                        System.out.println("LocalDate: " + LocalDate.now().toString());
+                        Map<LocalDateTime, Animal> history = xml.getSearchHistory();
+                        for (Map.Entry<LocalDateTime, Animal> entry : history.entrySet()) {
+                            System.out.println("Search time: " + entry.getKey() + " Search result: " + entry.getValue());
+                        }
+                    } catch(AnimalDataException ex){
+                        System.out.println("ERROR: "+ex.getMessage());
+                    }
                     break;
                 case "3":
                     working = false;
