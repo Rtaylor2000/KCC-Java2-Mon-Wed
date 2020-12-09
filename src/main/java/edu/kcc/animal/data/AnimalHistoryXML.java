@@ -50,7 +50,7 @@ public class AnimalHistoryXML {
                 Node currentAnimalNode = animalNodeList.item(i);
                 NamedNodeMap animalAttributeMap = currentAnimalNode.getAttributes();
                 Attr attr = (Attr)animalAttributeMap.getNamedItem("lookupTime");
-                LocalDateTime lookupTime = LocalDateTime.parse(attr.toString());
+                LocalDateTime lookupTime = LocalDateTime.parse(attr.getValue());
                 lookupHistory.put(lookupTime, buildAnimalFromNode(currentAnimalNode));
             }
         }

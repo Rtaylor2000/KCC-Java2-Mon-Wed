@@ -123,6 +123,7 @@ public class Main {
                                 Animal animal = getAnimalFromServer(response);
                                 System.out.print(animal.toString());
                                 xml.createHistoryRecord(animal);
+                                   
                             } catch(UnknownHostException uhe){
                                 System.out.println("ERROR: " + uhe.getMessage());
                                 System.out.println("Program terminating!");
@@ -138,11 +139,18 @@ public class Main {
                     break;
                 case "2":
                     try{
-                        System.out.println("LocalDateTime: "+ LocalDateTime.now().toString());
-                        System.out.println("LocalDate: " + LocalDate.now().toString());
                         Map<LocalDateTime, Animal> history = xml.getSearchHistory();
-                        for (Map.Entry<LocalDateTime, Animal> entry : history.entrySet()) {
-                            System.out.println("Search time: " + entry.getKey() + " Search result: " + entry.getValue());
+                        if(history.size() == 0){
+                            System.out.println("There is nothing in "
+                                    + "your search history.");
+                            System.out.println("Pleas look for an animal.");
+                        }
+                        else{
+                            for (Map.Entry<LocalDateTime, Animal> entry : history.entrySet()) {
+                                System.out.println("Search time: " 
+                                        + entry.getKey() + " Search result: " 
+                                        + entry.getValue());
+                            }
                         }
                     } catch(AnimalDataException ex){
                         System.out.println("ERROR: "+ex.getMessage());

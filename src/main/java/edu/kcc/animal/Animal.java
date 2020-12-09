@@ -45,8 +45,8 @@ public class Animal implements Comparable<Animal>{
         fixed = false;
         legs = 4;
         weight = BigDecimal.valueOf(0);
-        dateAdded = LocalDate.now(); // September 1, 2020
-        lastFeedingTime = LocalDateTime.now().withNano(0).withSecond(0); // October 1, 2020 at 11:59pm
+        dateAdded = LocalDate.now();
+        lastFeedingTime = LocalDateTime.now().withNano(0).withSecond(0);
     }
     
     public String getId(){
@@ -77,7 +77,7 @@ public class Animal implements Comparable<Animal>{
     }
     
     public void setSpecies(String species){
-        speciesValidator(species);
+        //speciesValidator(species);
         this.species = species;
     }
   
@@ -92,7 +92,7 @@ public class Animal implements Comparable<Animal>{
     }
     
     public void setGender(String gender) {
-        genderValidator(gender);
+        //genderValidator(gender);
         this.gender = gender;
     }
     
@@ -115,7 +115,7 @@ public class Animal implements Comparable<Animal>{
     }
     
     public void setAge(int animalAge){
-        ageValidator(age);
+        //ageValidator(age);
         this.age = animalAge;
     }
 
@@ -131,7 +131,7 @@ public class Animal implements Comparable<Animal>{
     }
 
     public void setFixed(boolean fixed) {
-        fixedValidator(fixed);
+        //fixedValidator(fixed);
         this.fixed = fixed;
     }
     
@@ -146,7 +146,7 @@ public class Animal implements Comparable<Animal>{
     }
     
     public void setLegs(int legs) {
-        legsValidator(legs);
+        //legsValidator(legs);
         this.legs = legs;
     }
     
@@ -163,7 +163,7 @@ public class Animal implements Comparable<Animal>{
     }
     
     public void  setWeight(BigDecimal lb){
-        weightValidator(weight);
+        //weightValidator(weight);
         this.weight = lb;
     }
     
@@ -181,7 +181,7 @@ public class Animal implements Comparable<Animal>{
     }
 
     public void setDateAdded(LocalDate ldt){
-        dateValidator(ldt);
+        //dateValidator(ldt);
         dateAdded = ldt;
     }
     
@@ -202,7 +202,7 @@ public class Animal implements Comparable<Animal>{
     }
 
     public void setLastFeedingTime(LocalDateTime ldt) {
-        feedingValidator(ldt);
+        //feedingValidator(ldt);
         lastFeedingTime = ldt;
     }
     
@@ -219,7 +219,10 @@ public class Animal implements Comparable<Animal>{
     @Override
     public String toString() {
         return "Animal {name: " + name + ", species: " + species + ", gender: "
-                + gender + ", age: " + age + ", weight: " + weight + "}";
+                + gender + ", age: " + age + ", \nfixed: " + fixed + 
+                ", legs: " + legs + ", weight: " + weight + 
+                ", date added: " + dateAdded + 
+                ", \nlast feeding time: " + lastFeedingTime +"}";
     }
     
     @Override
